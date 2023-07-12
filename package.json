@@ -1,8 +1,8 @@
 {
-  "name": "driven-bootstore-back",
+  "name": "driven-all-articles-back",
   "version": "1.0.0",
   "description": "",
-  "type":"module",
+  "type": "module",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luiz-gustavo-alves/Driven-BootStore-Back.git"
+    "url": "git+https://github.com/luiz-gustavo-alves/Driven-all-articles.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/luiz-gustavo-alves/Driven-BootStore-Back/issues"
+    "url": "https://github.com/luiz-gustavo-alves/Driven-all-articles/issues"
   },
-  "homepage": "https://github.com/luiz-gustavo-alves/Driven-BootStore-Back#readme",
+  "homepage": "https://github.com/luiz-gustavo-alves/Driven-all-articles#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.9",
