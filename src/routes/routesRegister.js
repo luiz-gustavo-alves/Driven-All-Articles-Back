@@ -2,7 +2,7 @@
 // lebrando que essa pasta vai ser enviada para a pasta indexRotas
 
 import { Router } from "express";
-import { register } from "../controllers/controlCadastro.js";
+import { register } from "../controllers/controlRegister.js";
 import { validateJoiGorAll } from "../middlewares/validateJoi.js";
 import { signUpSchema } from "../schemas/auth.schema.js";
 
