@@ -1,5 +1,5 @@
 import useRouter from "express";
-import { createProduct } from "../controllers/products.controller.js";
+import { createProduct, getProducts } from "../controllers/products.controller.js";
 
 import { validateToken } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
@@ -9,5 +9,6 @@ const productsRouter = useRouter();
 productsRouter.use(validateToken);
 
 productsRouter.post("/create-product", validateSchema(productSchema), createProduct);
+productsRouter.get("/home", getProducts);
 
 export default productsRouter;

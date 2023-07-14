@@ -4,12 +4,14 @@
 import { Router } from "express";
 import authRouter from "./auth.route.js";
 import productsRouter from "./products.route.js";
+import shoppingCartRouter from "./shoppingCart.route.js";
 
 const router = Router()
 
 router.use([
     authRouter, 
-    productsRouter
+    productsRouter,
+    shoppingCartRouter
 ]);
 
 export default router;
