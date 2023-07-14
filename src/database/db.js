@@ -15,5 +15,4 @@ export async function connectToDatabase() {
     }
 }
 
-const db = mongoClient.db();
-export default db;
+export const db = mongoClient.db();
