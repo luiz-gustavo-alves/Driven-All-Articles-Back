@@ -1,46 +1,53 @@
-import bcrypt from "bcrypt";
-import { v4 as uuid } from "uuid";
-import db from "../database/db.js";
+// esse arquivo aqui serve para executar o ligin
+// esse arquivo é chamado la em Routes
+// esse arquivo aqui é enviado por um post para faser o login
 
-export const signIn = async (req, res) => {
+import bcrypt from "bcrypt";
+import db from "../database/db.js";
+import { v4 as uuid } from "uuid";
+
+export async function login(req, res) {
 
     const { email, password } = res.locals.data;
 
     try {
-        const userDB = await db.collection("users").findOne({ email });
-        if (!userDB || !bcrypt.compareSync(password, userDB.password)) {
-            return res.status(404).send("E-mail ou senha incorretos.");
-        }
+        // validar o usuario
+        // verificar pelo email 
+        const user = await db.collection("users").findOne({ email });
+        // se o usuario fornecido nao estiver no sevidor - vericiar se a senha esta correta
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+            return res.status(404).send({ message: "E-mail ou senha incorretos!" })
+        };
 
-        /* If session token exists, deletes token from database. */
-        await db.collection("sessions").findOneAndDelete({ userId: userDB._id });
+        await db.collection("sessions").findOneAndDelete({ userID: user._id });
 
         const token = uuid();
-        await db.collection("sessions").insertOne({ userId: userDB._id, token });
+        await db.collection("sessions").insertOne({ userID: user._id, token });
 
-        res.send({ username: userDB.name, image: userDB.image, token: token });
+        res.send({ name: user.name, image: user.image, token: token });
 
     } catch (err) {
         res.status(500).send(err.message);
     }
 }
 
-export const signUp = async (req, res) => {
+export async function register(req, res) {
 
-    const { name, email, password, confirmPassword, image } = res.locals.data;
-
-    if (password !== confirmPassword) {
-        return res.status(404).send("Senhas não coincidem!");
-    }
+    // pegar os dados que a pessoa colocou na tela de cadastro
+    const { name, email, password, image } = res.locals.data;
 
     try {
-        const userDB = await db.collection("users").findOne({ email });
-        if (userDB) {
+        // verificar se o email ja foi castrado
+        const user = await db.collection("users").findOne({ email });
+        // se o usuario fornecido estiver no sevidor
+        if (user) {
             return res.status(409).send("E-mail já cadastrado!");
         }
 
-        const cryptedPassword = bcrypt.hashSync(password, Number(10));
-        await db.collection("users").insertOne({ name: name, email: email, password: cryptedPassword, image: image });
+        // se tudo estiver certo 
+        // cripitografas a senha 
+        const cryptedPassword = bcrypt.hashSync(password, 10);
+        await db.collection("users").insertOne({ name, email, password: cryptedPassword, image });
 
         res.sendStatus(201);
 

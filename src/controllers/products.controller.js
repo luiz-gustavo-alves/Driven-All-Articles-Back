@@ -3,13 +3,13 @@ import dayjs from "dayjs";
 
 export const createProduct = async (req, res) => {
 
-    const { userId } = res.locals.session;
+    const { userID } = res.locals.session;
 
     try {
         const newProduct = {
 
             ...res.locals.data,
-            userId: userId,
+            userID: userID,
             day: dayjs().locale('pt-br').format('DD/MM')
         }
 
