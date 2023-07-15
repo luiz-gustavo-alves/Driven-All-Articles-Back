@@ -5,6 +5,54 @@
 import bcrypt from "bcrypt";
 import db from "../database/db.js";
 import { v4 as uuid } from "uuid";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+        const filename = `${uuid()}-${file.originalname}`;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+export async function register(req, res) {
+    const { name, email, password } = req.body;
+
+    try {
+        const user = await db.collection("users").findOne({ email });
+        if (user) {
+            return res.status(409).send("E-mail já cadastrado!");
+        }
+
+        const cryptedPassword = bcrypt.hashSync(password, 10);
+
+        upload.single("image")(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).send("Erro durante o upload da imagem.");
+            } else if (err) {
+                return res.status(500).send("Ocorreu um erro no servidor.");
+            }
+
+            const image = req.file ? req.file.filename : '';
+
+            db.collection("users").insertOne({
+                name,
+                email,
+                password: cryptedPassword,
+                image
+            });
+
+            res.sendStatus(201);
+        });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
 
 export async function login(req, res) {
 
@@ -25,31 +73,6 @@ export async function login(req, res) {
         await db.collection("sessions").insertOne({ userID: user._id, token });
 
         res.send({ name: user.name, image: user.image, token: token });
-
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-}
-
-export async function register(req, res) {
-
-    // pegar os dados que a pessoa colocou na tela de cadastro
-    const { name, email, password, image } = res.locals.data;
-
-    try {
-        // verificar se o email ja foi castrado
-        const user = await db.collection("users").findOne({ email });
-        // se o usuario fornecido estiver no sevidor
-        if (user) {
-            return res.status(409).send("E-mail já cadastrado!");
-        }
-
-        // se tudo estiver certo 
-        // cripitografas a senha 
-        const cryptedPassword = bcrypt.hashSync(password, 10);
-        await db.collection("users").insertOne({ name, email, password: cryptedPassword, image });
-
-        res.sendStatus(201);
 
     } catch (err) {
         res.status(500).send(err.message);
