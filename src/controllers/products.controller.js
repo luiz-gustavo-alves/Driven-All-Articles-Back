@@ -55,3 +55,19 @@ export const getProducts = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+export const getProductById = async (req, res) => {
+
+    const { productID } = res.locals;
+
+    console.log(productID);
+
+    try {
+
+        const product = await db.collection("products").findOne({ _id: productID });
+        res.send(product);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
