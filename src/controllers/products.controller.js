@@ -60,12 +60,30 @@ export const getProductById = async (req, res) => {
 
     const { productID } = res.locals;
 
-    console.log(productID);
-
     try {
 
         const product = await db.collection("products").findOne({ _id: productID });
         res.send(product);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
+export const deleteProductById = async (req, res) => {
+    
+    const { session, product, productID } = res.locals;
+
+    console.log(productID);
+
+    if ( session.userID.toString() !== product.userID.toString() ) {
+        return res.sendStatus(401);
+    }
+
+    try {
+
+        await db.collection("products").findOneAndDelete({ _id: productID });
+        res.sendStatus(204);
 
     } catch (err) {
         res.status(500).send(err.message);
