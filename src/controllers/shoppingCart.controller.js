@@ -66,3 +66,17 @@ export const deleteProduct = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+export const finishOrder = async (req, res) => {
+    
+    const { userID } = res.locals.session;
+
+    try {
+
+        await db.collection("shoppingCart").deleteMany({ userID: userID });
+        res.sendStatus(200);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
