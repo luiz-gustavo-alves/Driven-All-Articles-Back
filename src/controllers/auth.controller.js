@@ -44,7 +44,7 @@ export async function login(req, res) {
         const token = uuid();
         await db.collection("sessions").insertOne({ userID: user._id, token });
 
-        res.send({ name: user.name, image: user.image, token: token });
+        res.send({ name: user.name, image: user.image, token: token, userID: user._id });
 
     } catch (err) {
         res.status(500).send(err.message);
