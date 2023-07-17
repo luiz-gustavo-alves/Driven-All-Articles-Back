@@ -5,13 +5,15 @@ import { Router } from "express";
 import authRouter from "./auth.route.js";
 import productsRouter from "./products.route.js";
 import shoppingCartRouter from "./shoppingCart.route.js";
+import userRouter from "./user.route.js";
 
 const router = Router()
 
 router.use([
     authRouter, 
     productsRouter,
-    shoppingCartRouter
+    shoppingCartRouter,
+    userRouter
 ]);
 
 export default router;

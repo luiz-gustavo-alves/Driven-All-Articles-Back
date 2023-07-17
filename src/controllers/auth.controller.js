@@ -50,3 +50,17 @@ export async function login(req, res) {
         res.status(500).send(err.message);
     }
 }
+
+export async function logout(req, res) {
+
+    const { session } = res.locals;
+
+    try {
+
+        await db.collection("sessions").findOneAndDelete({ token: session.token });
+        res.sendStatus(200);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
