@@ -8,7 +8,7 @@ export const validateSchema = (schema) => {
         for (const [key, value] of Object.entries(data)) {
             
             if (typeof value === "string") {
-                data[key] = stripHtml(value).result.trim();
+                data[key] = stripHtml(value).result;
             }
         }
 

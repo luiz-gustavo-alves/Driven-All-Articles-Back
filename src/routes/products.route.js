@@ -1,5 +1,5 @@
 import useRouter from "express";
-import { createProduct, deleteProductById, getProductById, getProducts } from "../controllers/products.controller.js";
+import { createProduct, deleteProductById, getProductById, getProducts, getProductsByQuery } from "../controllers/products.controller.js";
 
 import { validateToken } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
@@ -12,6 +12,7 @@ productsRouter.use(validateToken);
 productsRouter.post("/create-product", validateSchema(productSchema), createProduct);
 productsRouter.get("/home", getProducts);
 productsRouter.get("/product-page/:id", validateProductID, getProductById);
+productsRouter.get("/search", getProductsByQuery);
 productsRouter.delete("/delete-product/:id", validateProductID, deleteProductById)
 
 export default productsRouter;

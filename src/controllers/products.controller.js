@@ -87,3 +87,19 @@ export const deleteProductById = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+export const getProductsByQuery = async (req, res) => {
+
+    const { query } = req.query;
+
+    try {
+
+        console.log(query);
+
+        const products = await db.collection("products").find({$text: { $search: query }}).toArray();
+        res.send(products);
+        
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
