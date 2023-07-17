@@ -74,8 +74,6 @@ export const deleteProductById = async (req, res) => {
     
     const { session, product, productID } = res.locals;
 
-    console.log(productID);
-
     if ( session.userID.toString() !== product.userID.toString() ) {
         return res.sendStatus(401);
     }
